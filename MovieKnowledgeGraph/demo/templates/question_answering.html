@@ -1,0 +1,349 @@
+{% extends "base.html" %} {% block mainbody %}
+
+<script src="/static/js/echarts.js"></script>
+{#    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>#}
+{#    <script src="/static/js/echarts.all.js"></script>#}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <!--overview start-->
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="page-header"><i class="icon_chat_alt"></i> 电影问答 </h3>
+                    <ol class="breadcrumb">
+{#                        <li><i class="fa fa-home"></i><a href="\">Home</a></li>#}
+                        <li><i class="icon_chat_alt"></i>电影问答</li>
+                    </ol>
+                </div>
+            </div>
+
+            <section class="panel panel-default">
+                <header class="panel-heading">
+                    输入问题 :
+                </header>
+                <div class="panel-body">
+                    <form class="form-inline" method="get">
+                        <div class="form-row">
+                            <div class="form-group col-md-10">
+                                <input type="text" name="question" id="question" class="form-control" placeholder="Enter text" >  </input>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button type="submit" class="btn btn-primary btn-block"> 提交 </button>
+                            </div>
+                        </div>
+                        <br/><br/>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                            <p>
+                                热门搜索： <a href="#" onclick="$('#question').attr('value','章子怡演了什么电影？')"> 章子怡演了什么电影？</a> &nbsp;&nbsp;
+                                <a href="#" onclick="$('#question').attr('value','卧虎藏龙是由哪些人演的？')"> 卧虎藏龙是由哪些人演的？</a> &nbsp;&nbsp;
+                                <a href="#" onclick="$('#question').attr('value','The One电影的类型是什么？')"> The One电影的类型是什么？</a> &nbsp;&nbsp;
+                                <a href="#" onclick="$('#question').attr('value','英雄的评分是多少？')"> 英雄的评分是多少？</a> &nbsp;
+                                <a href="#" onclick="$('#question').attr('value','关之琳演了哪些类型的电影？')"> 关之琳演了哪些类型的电影？</a> &nbsp;
+                                <a href="#" onclick="$('#question').attr('value','李连杰和关之琳合作过哪些电影？')"> 李连杰和关之琳合作过哪些电影？</a>
+                                <a href="#" onclick="$('#question').attr('value','Yat luk che 电影的上映时间是什么时候？')"> Yat luk che 电影的上映时间是什么时候？</a>
+                                <a href="#" onclick="$('#question').attr('value','章子怡出演过多少部电影？')"> 章子怡出演过多少部电影 ？</a>
+
+                            </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <div class="row">
+                {% if ctx%}
+                <div class = "col-md-12">
+                    <div class="panel panel-default">
+                        <header class ="panel-heading">
+                            <div class = "panel-body">
+                                <h2>暂未找到答案</h2>
+                            </div>
+                        </header>
+                    </div>
+                </div>
+                {% endif %}
+                {% if ret %}
+                <div class = "col-md-12">
+                    <div class="panel panel-default">
+                        <header class ="panel-heading">
+                            <div class = "panel-body">
+                                <h2> {{ ans }} </h2>
+                            </div>
+                        </header>
+                    </div>
+                </div>
+
+{#                <div class = "col-md-12">#}
+{#                    <div class="panel panel-default">#}
+{#                        <header class ="panel-heading">#}
+{#                            <div class = "panel-body">#}
+{#                                <h2> {{ ret }} </h2>#}
+{#                            </div>#}
+{#                        </header>#}
+{#                    </div>#}
+{#                </div>#}
+
+                <div class="col-md-4">
+                    <section class="panel panel-default">
+                        <header class="panel-heading">
+                            答案：
+                        </header>
+                        <div class="panel-body">
+                            <table class="table" data-paging="true" data-sorting = "true" data-paging-size="10"></table>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-md-8">
+                     <section class="panel panel-default">
+                        <header class="panel-heading">
+                            图谱演示：
+                        </header>
+                        <div class="panel-body">
+                            <div id="graph" style="width: 100%;height:600px;"></div>
+                        </div>
+                    </section>
+                </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<script src="/static/js/jquery-1.8.3.min.js"></script>
+
+{% if ret %}
+<script type="text/javascript">
+    var ret_dict = {{ret|safe}} ;
+    //将所有的答案列在tableData中
+    tableData = [];
+    for(var i = 0 ;i< ret_dict['answer'].length;i++){
+        answer = {};
+        answer['answer'] = ret_dict['answer'][i];
+        tableData.push(answer)
+    }
+
+    jQuery(function () {
+        $('.table').footable({
+            "columns":[{"name":"answer",title:"答案"}],
+            "rows": tableData
+        });
+
+    });
+
+    // echarts 数据
+    var data = [];
+    var links = [];
+
+    //构造数据
+    var id = 0
+    for (var i = 0 ;i<ret_dict['list'].length;i++){
+        node1 = {};
+        node1['name'] = ret_dict['list'][i]['entity1'];
+        node1['draggable'] = true;
+
+        if(ret_dict['list'][i]['entity1_type'] === 'MovieItem'){
+            node1['category'] = 0;
+        }
+        else if(ret_dict['list'][i]['entity1_type'] === 'PersonItem'){
+            node1['category'] = 1;
+        }
+        else if(ret_dict['list'][i]['entity1_type'] === 'GenreItem'){
+            node1['category'] = 2;
+        }else if(ret_dict['list'][i]['entity1_type']==='RatingItem'){
+            node1['category'] = 3;
+        }
+
+
+        nodeId = id.toString();
+
+        var flag = 1;
+        for(var j  =0 ;j<data.length ; j++){
+            if(data[j]['name'] === node1['name']){
+                flag = 0 ;
+                nodeId = data[j]['id'] ;
+                break ;
+            }
+        }
+
+        node1['id'] = nodeId;
+        if(flag === 1){
+            id++ ;
+            data.push(node1)
+        }
+
+
+        node2={};
+        node2['name'] = ret_dict['list'][i]['entity2'];
+        node2['draggable'] = true
+        if(ret_dict['list'][i]['entity2_type'] === 'MovieItem'){
+            node2['category'] = 0
+        }
+        else if(ret_dict['list'][i]['entity2_type'] === 'PersonItem'){
+            node2['category'] = 1
+        }
+        else if(ret_dict['list'][i]['entity2_type'] === 'GenreItem'){
+            node2['category'] = 2
+        }
+        else if(ret_dict['list'][i]['entity2_type'] ==='RatingItem'){
+            node2['category'] = 3
+        }
+        else if(ret_dict['list'][i]['entity2_type'] ==='ReleasedateItem'){
+            node2['category'] = 4
+        }
+
+        nodeId = id.toString();
+
+        var flag  =1;
+        for(var j=0;j<data.length;j++){
+            if(data[j]['name'] === node2['name']){
+                flag = 0;
+                nodeId = data[j]['id'] ;
+                break ;
+            }
+        }
+
+        node2['id'] = nodeId;
+        if(flag === 1){
+            id++ ;
+            data.push(node2) ;
+        }
+
+        //  relation
+        relation = {};
+        relation['source'] = node1['id'];
+        relation['target'] = node2['id'];
+        relation['category'] = 0;
+
+        var flag = 1;
+        for(var j = 0 ;j<links.length ;j++){
+            if(links[j]['source'] === relation['source'] && links[j]['target'] === relation['target']){
+                flag = 0 ;
+                break ;
+            }
+        }
+        if(flag === 1){
+            relation['value'] = ret_dict['list'][i]['rel'] ;
+            relation['symbolSize'] = 10 ;
+            links.push(relation)  ;
+        }
+
+    }
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('graph'));
+
+    option = {
+	    title: {
+	        text: ''
+	    },
+	    tooltip: {},
+	    animationDurationUpdate: 1500,
+	    animationEasingUpdate: 'quinticInOut',
+	    label: {
+	        normal: {
+	            show: true,
+	            textStyle: {
+	                fontSize: 12
+	            },
+	        }
+	    },
+	    legend: {
+	        x: "center",
+	        show: false
+	    },
+	    series: [
+
+	        {
+	            type: 'graph',
+	            layout: 'force',
+	            symbolSize: 45,
+	            focusNodeAdjacency: true,
+	            roam: true,
+	            edgeSymbol: ['none', 'arrow'],
+	            categories: [{
+	                name: 'PersonItem',
+	                itemStyle: {
+	                    normal: {
+	                        color: "#ff9999",
+	                    }
+	                }
+	            }, {
+	                name: 'MovieItem',
+	                itemStyle: {
+	                    normal: {
+	                        color: "#9966cc",
+	                    }
+	                }
+	            }, {
+	                name: 'GenreItem',
+	                itemStyle: {
+	                    normal: {
+	                        color: "#000000",
+	                    }
+	                }
+	            }, {
+                    name: 'RatingItem',
+	                itemStyle: {
+	                    normal: {
+	                        color: "#330000",
+	                    }
+	                }
+	            }, {
+	                name: 'ReleasedateItem',
+	                itemStyle: {
+	                    normal: {
+	                        color: "#99ffff",
+	                    }
+	                }
+	            }, {
+	                name: '答案',
+	                itemStyle: {
+	                    normal: {
+	                        color: "#73C453",
+	                    }
+	                }
+	            }],
+	            label: {
+	                normal: {
+	                    show: true,
+	                    textStyle: {
+	                        fontSize: 12,
+	                    },
+	                }
+	            },
+	            force: {
+	                repulsion: 1000
+	            },
+	            edgeSymbolSize: [4, 50],
+	            edgeLabel: {
+	                normal: {
+	                    show: true,
+	                    textStyle: {
+	                        fontSize: 10
+	                    },
+	                    formatter: "{c}"
+	                }
+	            },
+	            data: data,
+	            links: links,
+	            lineStyle: {
+	                normal: {
+	                    opacity: 0.9,
+	                    width: 1.3,
+	                    curveness: 0,
+	                    color:"#262626",
+	                }
+	            }
+	        }
+	    ]
+	};
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+</script>
+{% endif %}
+
+{% endblock %}
