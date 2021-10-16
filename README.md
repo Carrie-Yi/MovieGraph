@@ -3,9 +3,11 @@ Film Question Answering System Based on Knowledge Graph (Naive Bayes)
 
 ## 环境配置
 🍇1、前期环境配置：包括neo4j等（mac为例）
+
 见：https://blog.csdn.net/Trance95/article/details/119682522
 
-🍇2、requirements（pip install）Cancel changes
+🍇2、requirements（pip install）
+
 Cython>=0.28.5
 Django>=1.11.7
 thulac>=0.1.2
@@ -19,5 +21,6 @@ Neo4j-driver==1.6.2
 Requests
 
 🍇3、更改激活环境
+
 Movie_Graph/Movie_KnowledgeGraph/demo/django_server_start.sh
 在django_server_start.sh文件中, 更改激活环境为自己使用的环境。
