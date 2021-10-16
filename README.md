@@ -1,6 +1,9 @@
 # MovieGraph
 Film Question Answering System Based on Knowledge Graph (Naive Bayes) 
 见：https://blog.csdn.net/Trance95/article/details/119613713
+![image](https://user-images.githubusercontent.com/57583392/137582740-af4e5583-edc6-4fbf-8bfe-5b46e5429f98.png)
+![image](https://user-images.githubusercontent.com/57583392/137582748-4018438e-af7f-4c2a-807c-f3eaea85acc1.png)
+![image](https://user-images.githubusercontent.com/57583392/137582750-79fa3280-7c97-43c2-a14a-f11e9dab0675.png)
 
 ## 环境配置
 🍇1、前期环境配置：包括neo4j等（mac为例）
