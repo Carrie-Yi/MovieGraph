@@ -35,3 +35,10 @@ Requests
 Movie_Graph/Movie_KnowledgeGraph/demo/django_server_start.sh
 
 在django_server_start.sh文件中, 更改激活环境为自己使用的环境。
+
+## 数据预处理
+见note文件夹
+## neo4j数据库建立
+见note文件夹
+## Hanlp分词以及朴素贝叶斯分类
+见note文件夹
