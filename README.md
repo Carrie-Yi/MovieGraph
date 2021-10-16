@@ -23,4 +23,5 @@ Requests
 🍇3、更改激活环境
 
 Movie_Graph/Movie_KnowledgeGraph/demo/django_server_start.sh
+
 在django_server_start.sh文件中, 更改激活环境为自己使用的环境。
