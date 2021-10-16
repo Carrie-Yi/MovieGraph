@@ -1,1 +1,5 @@
-
+1、环境配置（mac为例）
+https://blog.csdn.net/Trance95/article/details/119682522
+2、更改激活环境
+Movie_Graph/Movie_KnowledgeGraph/demo/django_server_start.sh
+在django_server_start.sh文件中, 更改激活环境为自己使用的环境。
