@@ -1,0 +1,9 @@
+序号,id,问题类型,疑问词短语,例子
+1,Person2Movie,演员的作品,哪些/什么,xx演员演了哪些电影？
+2,Movie2Person,电影的演员,哪些,xx电影的演员有哪些？
+3,Movie2Genre,电影的风格,哪些/什么,xx电影是什么风格/格调/类型？
+4,MovieItem.Rate,电影的评分,多少,xx电影评分是多少？
+5,"Person2Movie,Movie2Genre",演员的电影的类型,哪些,xx演员演过哪些类型的电影？
+6,MovieItem.releasedate,电影的上映时间,什么时候/什么,xx电影的上映时间是？
+7,"a: Person2Movie ,b:Person2Movie",两个演员共同参演的电影,哪些,A演员和B演员合作过哪些电影？
+8,"Person2Movie, len(list)",演员的电影总数,多少,xx演员出演过多少部电影？
