@@ -12,8 +12,11 @@ Cython>=0.28.5
 Django>=1.11.7
 thulac>=0.1.2
 py2neo==4.1.0
+
 pyfasttext==0.4.5
+
 #（如果是mac,  CXX=/usr/bin/clang CC=/usr/bin/clang pip3 install --no-cache pyfasttext）
+
 pinyin>=0.4.0
 pymongo>=3.6.1
 Neo4j
